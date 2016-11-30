@@ -59,6 +59,7 @@
     - redis
     - api
     - settings
+    - filters
     - checks
   notify:
     - restart sensu server

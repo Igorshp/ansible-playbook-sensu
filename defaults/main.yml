@@ -9,6 +9,7 @@ sensu_install_uchiwa: true
 sensu_user:  sensu
 sensu_group: sensu
 
+sensu_filters: {}
 sensu_settings: {}
 
 sensu_embedded_ruby: "true"
