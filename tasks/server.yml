@@ -54,6 +54,7 @@
     owner=sensu
     group=sensu
     mode=0640
+    force=no
   with_items:
     - handlers
     - redis
