@@ -11,13 +11,18 @@
     - server
     - api
   when: sensu_server_patch_init_scripts
+  register: init_scripts
 
 - name: ensure the patched init script are used
   command: /usr/sbin/update-rc.d -f sensu-{{ item }} remove && /usr/sbin/update-rc.d sensu-{{ item }} defaults
   with_items:
     - server
     - api
-  when: sensu_server_patch_init_scripts
+  when: 
+    - sensu_server_patch_init_scripts
+    - init_scripts.changed
+  notify:
+    - restart sensu server
 
 - name: copy the handlers files
   copy:
@@ -26,6 +31,8 @@
     owner=sensu
     group=sensu
     mode=0750
+  notify:
+    - restart sensu server
 
 - name: copy extension files
   copy:
@@ -65,11 +72,11 @@
   notify:
     - restart sensu server
 
-- name: Start sensu-{server,api} and make it survive a reboot
-  service:
-    name=sensu-{{ item }}
-    enabled=yes
-    state=started
-  with_items:
-    - server
-    - api
+# - name: Start sensu-{server,api} and make it survive a reboot
+#   service:
+#     name=sensu-{{ item }}
+#     enabled=yes
+#     state=started
+#   with_items:
+#     - server
+#     - api
